@@ -1,0 +1,38 @@
+.input-wrapper {
+
+    margin: 1.5rem 0;
+    position: relative;
+
+    &--with-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    
+        label {
+            font-size: 1rem;
+            order: 1;
+            color: $paragraph-color;
+            margin-left: 0.75rem;
+        }
+        input {
+            order: 2;
+            padding: 0.35rem;
+            border-radius: 4px;
+            outline: 0;
+            border: 0;
+            box-shadow: 0 0 4px #555;
+
+            &:required + label {
+                &::after {
+                    content: "*";
+                    position: absolute;
+                    left: 0;
+                    top: 4px;
+                    color: red;
+                }
+            }
+        }
+    }
+
+
+}

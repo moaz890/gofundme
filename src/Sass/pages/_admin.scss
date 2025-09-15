@@ -1,0 +1,302 @@
+.admin {
+    &__container {
+        display: flex;
+        min-height: 100vh;
+        
+        &__sidebar{
+            padding: 2.5rem;
+            background-color: #eee;
+            
+            h3 {
+                color: $primary-color;
+                font-size: 1.5rem;
+
+                a{
+                    color: inherit;
+                }
+            }
+
+            &__links {
+                list-style: none;
+                line-height: 1.5;
+                font-size: 1.2rem;
+                
+                a {
+                    color: $dark-color;
+                }
+            }
+        }
+    }
+    main {
+        flex: 1;
+        
+        nav {
+            box-shadow: 0 0 6px #eee;
+            padding: 1rem ;
+        }
+
+        section {
+            padding: 1rem;
+        }
+
+        ul {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            color: $paragraph-color;
+            margin-top: 1rem;
+            a{
+                transition: 0.5s;
+            }
+            a:hover{
+                color: $primary-color;
+            }
+        }
+    }
+
+        &__users {
+            width: 100%;
+            padding: 1rem;
+            overflow-x: auto; // horizontal scroll if needed
+    
+            &__data {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.95rem;
+    
+                th,
+                td {
+                    padding: 0.75rem;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                    vertical-align: middle;
+                }
+    
+                th {
+                    background-color: #f8f8f8;
+                    font-weight: bold;
+                }
+    
+                // Status colors
+                .active-user {
+                    color: #28a745; // green
+                    font-weight: bold;
+                }
+    
+                .inactive-user {
+                    color: #ff9800; // orange
+                    font-weight: bold;
+                }
+    
+                // Buttons
+                .btn {
+                    padding: 0.4rem 0.8rem;
+                    font-size: 0.85rem;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+    
+                    &--secondary {
+                        background-color: #007bff;
+                        color: #fff;
+    
+                        &:hover {
+                            background-color: #0056b3;
+                        }
+                    }
+                }
+            }
+    
+        }
+
+    &__pledges {
+        width: 100%;
+        padding: 1rem;
+        overflow-x: auto; // horizontal scroll if needed
+
+        &__data {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+
+            th,
+            td {
+                padding: 0.75rem;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+                vertical-align: middle;
+            }
+
+            th {
+                background-color: #f8f8f8;
+                font-weight: bold;
+            }
+
+            // Optional highlight for rows
+            .pledge-row:hover {
+                background-color: #f9f9f9;
+            }
+        }
+
+        /* Medium screens */
+     
+    }
+}
+
+@media (max-width: 767px) {
+    .admin {
+        &__container {
+
+            &__sidebar {
+                display: none;
+            }
+        }
+
+        main {
+            ul {
+                display: flex;
+            }
+        }
+    }
+}
+
+/* Medium screens */
+@media (max-width: 992px) {
+
+    .admin__users__data th,
+    .admin__users__data td {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Small screens: horizontal scroll */
+@media (max-width: 768px) {
+    .admin__users__data {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .admin__users__data th,
+    .admin__users__data td {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Extra small screens: stacked view */
+@media (max-width: 576px) {
+
+    .admin__users__data,
+    .admin__users__data thead,
+    .admin__users__data tbody,
+    .admin__users__data th,
+    .admin__users__data td,
+    .admin__users__data tr {
+        display: block;
+        width: 100%;
+    }
+
+    .admin__users__data thead {
+        display: none; // hide headers
+    }
+
+    .admin__users__data tr {
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 0.5rem;
+        background: #fff;
+    }
+
+    .admin__users__data td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+        white-space: normal;
+
+        &::before {
+            content: attr(data-label); // show header label
+            position: absolute;
+            left: 0.5rem;
+            width: 45%;
+            padding-right: 0.5rem;
+            font-weight: bold;
+            text-align: left;
+        }
+    }
+}
+
+   @media (max-width: 992px) {
+
+       .admin__pledges-data th,
+       .admin__pledges-data td {
+           font-size: 0.85rem;
+           padding: 0.5rem;
+       }
+   }
+
+   /* Small screens: horizontal scroll */
+   @media (max-width: 768px) {
+       .admin__pledges-data {
+           display: block;
+           overflow-x: auto;
+           white-space: nowrap;
+       }
+
+       .admin__pledges-data th,
+       .admin__pledges-data td {
+           padding: 0.4rem;
+           font-size: 0.8rem;
+       }
+   }
+
+   /* Extra small screens: stacked view */
+   @media (max-width: 576px) {
+
+       .admin__pledges-data,
+       .admin__pledges-data thead,
+       .admin__pledges-data tbody,
+       .admin__pledges-data th,
+       .admin__pledges-data td,
+       .admin__pledges-data tr {
+           display: block;
+           width: 100%;
+       }
+
+       .admin__pledges-data thead {
+           display: none; // hide headers
+       }
+
+       .admin__pledges-data tr {
+           margin-bottom: 1rem;
+           border: 1px solid #ddd;
+           border-radius: 6px;
+           padding: 0.5rem;
+           background: #fff;
+       }
+
+       .admin__pledges-data td {
+           text-align: right;
+           position: relative;
+           padding-left: 50%;
+           white-space: normal;
+
+           &::before {
+               content: attr(data-label); // show header label
+               position: absolute;
+               left: 0.5rem;
+               width: 45%;
+               padding-right: 0.5rem;
+               font-weight: bold;
+               text-align: left;
+           }
+       }
+   }

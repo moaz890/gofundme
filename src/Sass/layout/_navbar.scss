@@ -1,0 +1,43 @@
+.navbar {
+    padding: 1rem 0;
+    box-shadow: 0px 0px 6px #333;
+    
+    
+    &__links {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        a {
+            transition: 0.5s ;
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+    &__control-mode {
+        cursor: pointer;
+        i {
+            &.fa-sun {
+                color: $secondary-color;
+            }
+            &.fa-moon {
+                color: $light-color;
+            }
+        }
+    }
+
+
+
+    &__control-accessbility {
+        display: flex;
+        gap: 0.5rem;
+        margin-right: 0.5rem;
+
+        .hide {
+            display: none;
+        } 
+    }
+}
+

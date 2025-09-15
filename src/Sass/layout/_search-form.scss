@@ -1,0 +1,26 @@
+.search-form {
+    position: relative;
+    display: none;
+    width: max-content;
+    margin: 16px auto;
+    &__input {
+        width: 300px;
+        padding: 0.40rem 0.5rem;
+        outline: none;
+        border: 1px solid $paragraph-color;
+        border-radius: 4px;
+        background-color: transparent;
+    }
+
+    i {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (min-width: $breakpoint-md) {
+        display: block;
+    }
+
+}

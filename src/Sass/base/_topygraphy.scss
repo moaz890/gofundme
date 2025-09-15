@@ -1,0 +1,77 @@
+body {
+  overflow-x: hidden;
+  &.light-mode{
+    background-color: $light-color;
+    color: $dark-color;
+  }
+  &.dark-mode {
+    background-color: $dark-color;
+    color: $light-color;
+
+    .navbar {
+      &__form {
+        &__input {
+          color: white;
+        }
+      }
+    }
+  }
+}
+.container {
+  max-width: 1200px;
+  margin: 0px auto;
+  position: relative;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+.flex {
+  display: flex;
+}
+.flex-col{
+  flex-direction: column;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.items-center{
+  align-items: center;
+}
+.relative {
+  position: relative;
+}
+
+.empty-info {
+  font-size: 2.5rem;
+  color: $paragraph-color;
+  text-align: center;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color: #000000, $alpha: 0.9);
+  display: none;
+  &.show {
+    display: flex;
+  }
+
+  &__close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $danger-color;
+    color: $light-color;
+    padding: 0.25rem;
+    border-start-start-radius: 4px;
+  }
+}
+#app {
+  min-height: 100vh;
+}
+@media (min-width: $breakpoint-lg) {
+  .container {
+    padding: 0;
+  }
+}

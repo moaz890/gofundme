@@ -1,0 +1,41 @@
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: 0;
+    
+    &--transparent{
+        border: 1px solid $primary-color;
+        color: $primary-color;
+        background-color: transparent;
+
+    }
+    &--secondary {
+        border: 1px solid $secondary-color;
+        color: $secondary-color;
+        background-color: transparent;
+    }
+
+    &--primary{
+        background-color: $primary-color;
+        color: $light-color;
+        border: 0;
+        transition: 0.5s all;
+
+        &:hover {
+            background-color: rgba($color: $primary-color, $alpha: 0.9);
+        }
+    }
+    
+    &--danger {
+        background-color: $danger-color;
+        color: $light-color;
+        border: 0;
+        transition: 0.5s all;
+    
+        &:hover {
+            background-color: rgba($color: $danger-color, $alpha: 0.9);
+        }
+
+    }
+}

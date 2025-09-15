@@ -1,0 +1,26 @@
+.alert {
+    position: absolute;
+    bottom: 16px;
+    right: 0px;
+    background-color: $light-color;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 4px #bbb;
+    transition: 0.5s all;
+    gap: 16px;
+    transform: translateX(100%);
+    &.show {
+        right: 16px;
+        transform: translateX(0);
+        
+    }
+
+    &--error {
+        color: $danger-color;
+    }
+
+    &--success {
+        color: $primary-color;
+    }
+}

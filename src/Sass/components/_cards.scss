@@ -1,0 +1,49 @@
+.card {
+    border-radius: 6px;
+    box-shadow: 0px 0px 4px #777;
+    padding: 1rem;
+    cursor: pointer;
+    &__image {
+        img{
+            width: 100%;
+            max-width: 100%;
+            border-radius: 6px;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        align-content: end;
+        &__campaign {
+
+            &__title {
+                text-align: center;
+                font-size: 1.15rem;
+                color: $primary-color;
+            }
+            .flex {
+                margin-top: 1rem;
+            }
+
+            span {
+                padding: 0.25rem 0.5rem;
+                display: block;
+                border-radius: 16px;
+            }
+            &__goal {
+                background-color: $secondary-color;
+            }
+            &__paid {
+                background-color: $primary-color;
+
+            }
+        }
+    }
+
+}
+
+@media (min-width: 992px) {
+    .card {
+        max-width: 300px;
+    }
+}
