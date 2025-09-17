@@ -1,7 +1,7 @@
-import { getMyCampaigns } from "../my-campaigns";
+ import { getMyCampaigns } from "../my-campaigns";
 
-export default function CampaignFormComponent () {
-    return `
+export default  {
+    html: `
         <div class='overlay'>   
             <button class='btn btn--danger overlay__close-btn'>X</button>     
         <section class="campaign-form-section">
@@ -49,7 +49,17 @@ export default function CampaignFormComponent () {
   </form>
 </section>
 </div>
-    `
+    `,
+
+  init: () => {
+    const form = document.querySelector(".campaign-form");
+    if(form) {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        addCampaign(e)
+      })
+    }
+  }
 }
 
 
@@ -139,10 +149,3 @@ const addCampaign = async (e) => {
 };
 
 
-document.addEventListener("submit", (e) => {
-    e.preventDefault()
-    const form = e.target.closest(".campaign-form");
-    if(form) {
-        addCampaign(e)
-    }
-})

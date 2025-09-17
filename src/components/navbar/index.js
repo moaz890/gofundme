@@ -1,6 +1,6 @@
-export const Navbar = () => {
-
-    const html = `
+export default {
+    
+    html : `
         <nav class="navbar">
             <div class="container flex items-center justify-between">
                 <span class="navbar__logo">
@@ -24,7 +24,9 @@ export const Navbar = () => {
                     </svg>
                 </span>
 
-                ${isAnonymousUser() ? "" : getNavLinks()}
+                <ul class='navbar__links'>
+
+                </ul>
 
                 <div class="flex items-center">
                     <div class="navbar__control-accessbility">
@@ -42,9 +44,25 @@ export const Navbar = () => {
                     </span>
                 </div>
             </div>
-       </nav>`
+       </nav>`,
 
-       return html;
+    init: () => {
+        const navbarLinks = document.querySelector(".navbar__links");
+        const modeBtn = document.querySelector(".navbar__control-mode");
+        const logoutBtn = document.querySelector(".navbar__control-accessbility #logout-btn");
+        
+        if(!isAnonymousUser()){
+            navbarLinks.innerHTML = getNavLinks();
+        }
+        
+        modeBtn.addEventListener("click", (e) => {
+            const currentMode = localStorage.getItem("mode");
+            changeMode(currentMode);
+        });
+        
+        logoutBtn.addEventListener("click", logout);
+        
+    }
 }
 
 export const setMode = () => {
@@ -92,10 +110,8 @@ export function logout () {
 
 const getNavLinks = () => {
     return `
-        <ul class="navbar__links">
             <li><a href="/">Home</a></li>
             <li><a href="/my-campaigns">My Campaigns</a></li>
             <li><a href="/my-pledges">My Pledges</a></li>
-        </ul>
     `
 }

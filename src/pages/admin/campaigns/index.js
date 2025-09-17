@@ -1,5 +1,5 @@
-export default function Capmpaigns () {
-    return `
+export default {
+    html:  `
         <div class="admin__campaigns">
             <table class="admin__campaigns-data">
                 <thead>
@@ -21,7 +21,10 @@ export default function Capmpaigns () {
                 </tbody>
         </table>
     </div>
-    `
+    `,
+    init: () => {
+        getCampaigns()
+    }
 }
 
 

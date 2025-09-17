@@ -1,5 +1,5 @@
-export default function Login () {
-    return `
+export default  {
+    html:  `
         <section class="login-container">
         <form class="login-container__form">
             <h3>Login Form</h3>
@@ -20,7 +20,13 @@ export default function Login () {
             <button type="submit" class="btn btn--primary">Login</button>
         </form>
     </section>
-    `
+    `,
+    init: () => {
+        const loginForm = document.querySelector(".login-container__form");
+        if (loginForm) {
+            loginForm.addEventListener("submit", login);
+        }   
+    }
 }
 
 

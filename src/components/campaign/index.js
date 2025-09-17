@@ -1,18 +1,17 @@
-import { handleNavbarEvents } from "../../pages/home";
 import { getCampaignsJoined } from "../campaigns";
 import DonateFormComponent, { donate } from "../donate-form";
-import { isAnonymousUser, Navbar } from "../navbar";
+import Navbar, { isAnonymousUser } from "../navbar";
 
-export default function CampaignComponent() {
-    const html = `
-            ${Navbar()}
+export default  {
+    html : `
+            ${Navbar.html}
             <div class='card-container'>
 
             </div>
             <div class="pledges">
                 <h3 class='pledges__header'>Top Five Pledges</h3>
             </div>
-            ${DonateFormComponent()}
+            ${DonateFormComponent.html}
             <div class='alert alert--error'>
                 <span class='alert__mark'>❌</span>
                 <span class='alert__text'>Some Error Here try again later</span>
@@ -21,9 +20,37 @@ export default function CampaignComponent() {
                 <span class='alert__mark'>✔</span>
                 <span class='alert__text'>Successfully Process done</span>
             </div>
-        `;
-    handleNavbarEvents();
-    return html;
+        `,
+    init: async() => {
+        Navbar?.init();
+        DonateFormComponent?.init()
+        const response = await getCampaign();
+        
+        
+        const overlayCloseBtn = document.querySelector(".overlay__close-btn");
+        const campaignCard = document.querySelector(".card-container");        
+        const overlay = document.querySelector(".overlay");
+        campaignCard?.addEventListener("click", (e) => {
+            const donateBtn = e.target.closest(".campaign-card__button--donate");
+            if(donateBtn) {
+
+                if (isAnonymousUser()) {
+                    e.preventDefault()
+                    return;
+                }
+                overlay.classList.add("show");
+                const amountInput = overlay.querySelector("input#amount");
+                amountInput.setAttribute("max", +campaign?.goal - +response);
+            }
+            
+            
+        });
+        if(overlayCloseBtn) {
+            overlayCloseBtn.addEventListener("click", (e) => {
+                overlay.classList.remove("show")
+            })
+        }
+    }
 }
 
 export const getCampaign = async () => {
@@ -56,11 +83,13 @@ export const getCampaign = async () => {
         `
     }
     if (pledgesContainer) {
-        pledgesContainer.innerHTML += getTopFivePledges(pledges)
+        pledgesContainer.innerHTML = getTopFivePledges(pledges)
     }
+
+    return pledgesAmounts;
     
 }
-let campaign = {}
+export let campaign = {}
 export const getCampaignPledges = async (id) => {
     const req = await fetch("http://localhost:3000/pledges");
     const response = await req.json();
@@ -69,22 +98,6 @@ export const getCampaignPledges = async (id) => {
     return pledges;
 }
 
-document.addEventListener("DOMContentLoaded", getCampaign);
-document.addEventListener("click", (e) => {
-    const donateBtn = e.target.closest(".campaign-card__button--donate");
-    const overlayCloseBtn = e.target.closest(".overlay__close-btn");
-    const overlay = document.querySelector(".overlay");
-    if(donateBtn) {
-        overlay.classList.add("show");
-        const amountInput = overlay.querySelector("input#amount");
-        amountInput.setAttribute("max", +campaign?.goal - campaign.amount);
-    }
-    
-    if(overlayCloseBtn) {
-        document.querySelector(".overlay").classList.remove("show")
-    }
-    
-});
 
 export const getCampaignById = async () => {
     const searchParam = location.search;
@@ -98,20 +111,6 @@ export const getCampaignById = async () => {
     campaign['id'] = response.id;
     return response;
 }
-
-document.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const donateForm = e.target.closest(".donate-form");
-    if(donateForm) {
-        donate({
-            campaignId: campaign.id,
-            userId: JSON.parse(localStorage.getItem("user")).id, 
-            amount: donateForm.querySelector("input#amount").value
-        });
-        document.querySelector(".overlay").classList.remove("show");
-        getCampaign()
-    }
-})
 
 
 export function getTopFivePledges(pledges = []) {

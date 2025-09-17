@@ -1,6 +1,6 @@
 
-export default function Pledges () {
-    return `
+export default  {
+    html: `
         <div class="admin__pledges">
             <table class="admin__pledges__data">
                 <thead>
@@ -17,7 +17,10 @@ export default function Pledges () {
                 </tbody>
         </table>
     </div>
-    `   
+    `,
+    init: () => {
+        getPledges();
+    }   
 }
 
 

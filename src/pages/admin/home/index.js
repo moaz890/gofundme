@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto"
-export default function AdminHomePage () {
-    return `
+export default {
+    html: `
         <div class="admin-dashboard">
             <div class="admin-dashboard__chart">
                 <h3>Campaign Funding Progress</h3>
@@ -21,37 +21,34 @@ export default function AdminHomePage () {
                <canvas id="userStatusChart"></canvas>
             </div>
         </div>
-    `   
-}
-
-
-document.addEventListener("DOMContentLoaded", async () => {
-    if (location.pathname === "/admin") {
-
-        const campaigns = await getCampaigns()
-        const pledges = await getPledges();
+    `,
+    
+    init: async () => {
+      const campaigns = await getCampaigns()
+      console.log(campaigns)
+      const pledges = await getPledges();
         const campaignTotals = campaigns.map(camp => {
         const totalPledged = pledges
           .filter(p => p.campaignId == camp.id)
           .reduce((sum, p) => sum + Number(p.amount), 0);
-        return {
-          title: camp.title,
-          goal: camp.goal,
-          pledged: totalPledged
-        };
-      });
+            return {
+              title: camp.title,
+              goal: camp.goal,
+              pledged: totalPledged
+            };
+        });
     
       
-      const users = await getUsers();
-      const userTotals = users.map(user => {
-        const totalContributed = pledges
-          .filter(p => p.userId == user.id)
-          .reduce((sum, p) => sum + Number(p.amount), 0);
-        return {
-          name: user.name,
-          amount: totalContributed
-        };
-      });
+        const users = await getUsers();
+        const userTotals = users.map(user => {
+          const totalContributed = pledges
+            .filter(p => p.userId == user.id)
+            .reduce((sum, p) => sum + Number(p.amount), 0);
+          return {
+            name: user.name,
+            amount: totalContributed
+          };
+        });
     
     
       const approvedCount = campaigns.filter(c => c.approved).length;
@@ -145,9 +142,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         });
       }
-    }   
+  }
+}
 
-})
+
 
 const getCampaigns = async () => {
     let req = await fetch("http://localhost:3000/campaigns")

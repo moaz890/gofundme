@@ -1,7 +1,7 @@
 import { isFormValid } from "../login";
 
-export default function Register () {
-    return `
+export default  {
+    html:  `
         <section class="register-container">
         <form class="register-container__form">
             <h3>Register Form</h3>
@@ -25,7 +25,13 @@ export default function Register () {
             <button type="submit" class="btn btn--primary">Register</button>
         </form>
     </section>
-    `
+    `,
+    init: () => {
+        const registerForm = document.querySelector(".register-container__form");
+        if(registerForm) {
+            registerForm.addEventListener("submit", register);
+        }
+    }
 }
 
 

@@ -1,9 +1,9 @@
-import { getCampaignById, getCampaignPledges } from "../campaign"
+import campaign, { getCampaign } from "../campaign";
 
-export default  function DonateFormComponent() {
+export default {
     
     
-    return `
+    html: `
         <div class='overlay'>   
             <button class='btn btn--danger overlay__close-btn'>X</button>     
             <form class="donate-form">
@@ -37,7 +37,22 @@ export default  function DonateFormComponent() {
             </form>
         </div>
 
-    `
+    `,
+    init: () => {
+        const form = document.querySelector(".donate-form");
+        if(form) {
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+                donate({
+                    campaignId: campaign.id,
+                    userId: JSON.parse(localStorage.getItem("user")).id, 
+                    amount: donateForm.querySelector("input#amount").value
+                });
+                document.querySelector(".overlay").classList.remove("show");
+                getCampaign()
+            });
+        }
+    }
 }
 
 export const donate = async ({ campaignId, amount, userId }) => {

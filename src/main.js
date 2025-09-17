@@ -1,11 +1,11 @@
-import CampaignComponent, { getCampaign } from './components/campaign/index.js';
+import CampaignComponent from './components/campaign/index.js';
 import MyCampaignsComponent from './components/my-campaigns/index.js';
 import MyPledgesComponent from './components/my-pledges/index.js';
 import { setMode } from './components/navbar/index.js';
 import Admin from './pages/admin/index.js';
 import Home from './pages/home/index.js';
-import Login, { login } from './pages/login/index.js';
-import Register, { register } from './pages/register/index.js';
+import Login from './pages/login/index.js';
+import Register from './pages/register/index.js';
 import "./Sass/main.css"
 
 
@@ -21,32 +21,19 @@ const routes = {
 
 function router() {
   
+  removeTokenIfExpired()
   
-  let page;
-  let route = location.pathname.split("/")[1] || ""
-  if (!localStorage.getItem("access-token") && (route === "admin" )) {
-    route = "login"
-  }
-  if (localStorage.getItem("access-token") && (route === "login" || route === "register")){
-    route = ""
-  }
+  let route = getRoute();
+  let page = routes[route];
   
-  if (!localStorage.getItem("access-token") && (route === "my-campaigns" || route === 'my-pledges') ){
-    route = "login"
-  }
-  
-  if(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).role === "admin" && route === ""){
-    route = "admin"
+  if (!page) {
+    document.getElementById('app').innerHTML = '<h1>404</h1>';
+    return;
   }
 
-  page = routes[route];
-  
-  if (page) {
-    
-    document.getElementById('app').innerHTML = page();
-  } else {
-    document.getElementById('app').innerHTML = '<h1>404 Not Found</h1>';
-  }
+  document.getElementById('app').innerHTML = page.html;
+
+  if (page.init) page.init();
 }
 
 
@@ -69,17 +56,28 @@ window.addEventListener("popstate", router);
 document.addEventListener("DOMContentLoaded", () => {
   router();
   setMode();
-  removeTokenIfExpired()
-  const loginForm = document.querySelector(".login-container__form");
-  if(loginForm){
-    loginForm.addEventListener("submit", login)
-  }
-  const registerForm = document.querySelector(".register-container__form");
-  if(registerForm) {
-    registerForm.addEventListener("submit", register);
-  }
-  
 });
 
 
 
+function getRoute() {
+  let route = location.pathname.split("/")[1] || ""
+  
+  if (!localStorage.getItem("access-token") && (route === "admin" )) {
+    route = "login"
+  }
+  if (localStorage.getItem("access-token") && (route === "login" || route === "register")){
+    route = ""
+  }
+  
+  if (!localStorage.getItem("access-token") && (route === "my-campaigns" || route === 'my-pledges') ){
+    route = "login"
+  }
+  
+  if(localStorage.getItem("user") && JSON.parse(localStorage.getItem("user")).role === "admin" && route === ""){
+    route = "admin"
+  }
+
+  return route;
+
+}

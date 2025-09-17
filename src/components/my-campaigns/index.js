@@ -1,28 +1,96 @@
-import { handleNavbarEvents } from "../../pages/home";
 import { getTopFivePledges } from "../campaign";
 import CampaignFormComponent from "../campaign-form";
 import { getCampaignsJoined } from "../campaigns";
-import { isAnonymousUser, Navbar } from "../navbar";
+import Navbar, { isAnonymousUser}  from "../navbar";
 
-export default function MyCampaignsComponent () {
-    const html = `
-                ${Navbar()}
+export default  {
+    html:  `
+        ${Navbar.html}
+        
+        <div class='user-campaigns'>
+
+        </div>
+        ${CampaignFormComponent.html}
+        <div class='alert alert--error'>
+            <span class='alert__mark'>❌</span>
+            <span class='alert__text'>Some Error Here try again later</span>
+        </div>
+        <div class='alert alert--success'>
+            <span class='alert__mark'>✔</span>
+            <span class='alert__text'>Successfully Process done</span>
+        </div>
+    `,
+    init: () => {
+        Navbar?.init();
+        CampaignFormComponent?.init();
+        // fetch and render campaigns
+        if(!isAnonymousUser()) getMyCampaigns();
+
+        // click delegation, but only for this page:
+        document.querySelector(".user-campaigns")?.addEventListener("click", (e) => {
+            const addBtn = e.target.closest(".campaigns__add-btn");
+            const editCampaignBtn = e.target.closest(".campaign-card__button--edit")
+            const overlay = document.querySelector(".overlay")
+            if (addBtn) {
+                document.querySelector(".overlay").classList.add("show");
+                const form = overlay.querySelector("form");
+        
+                if(form.classList.contains("edit-campaign")){
+                    overlay.querySelector("h2").textContent = "Create New Campaign";
+                    form.classList.remove("edit-campaign");
+                    form.querySelector("input#campaign-id").remove()
+                    form.querySelector("button").textContent  = "Create Campaign"
+                }
+            }
+
+            if(editCampaignBtn){
+                overlay.classList.add("show");
+                overlay.querySelector("h2").textContent = "Edit Campaign";
+
+                const campaignId = editCampaignBtn.querySelector("input").value;
+                const campaign = campaigns.find(x => x.id == campaignId);
+
+                const form = overlay.querySelector("form");
+                form.classList.add("edit-campaign");
+
+                const existingHidden = form.querySelector("#campaign-id");
+                if (existingHidden) existingHidden.remove();
+
+                form.insertAdjacentHTML("afterbegin", `
+                    <input type="hidden" id="campaign-id" name="campaign-id" value="${campaignId}"/>
+                `);
+
+                form.querySelector("button").textContent = "Edit";
+
+                form.querySelector("#title").value = campaign.title || "";
+                form.querySelector("#description").value = campaign.description || "";
+                form.querySelector("#goal").value = campaign.goal || "";
+                form.querySelector("#deadline").value = campaign.deadline || "";
+                form.querySelector("#category").value = campaign.category || "";
+
+                if (form.classList.contains("edit-campaign")) {
+                    document.getElementById("imageFile").removeAttribute("required");
+                } else {
+                    document.getElementById("imageFile").setAttribute("required", "required");
+                }
                 
-                <div class='user-campaigns'>
+                let existingImageInput = form.querySelector("#existingImage");
+                if (!existingImageInput) {
+                    form.insertAdjacentHTML("beforeend", `
+                        <input type="hidden" id="existingImage" name="existingImage" value="${campaign.image}" />
+                    `);
+                } else {
+                    existingImageInput.value = campaign.image;
+                }
+            
+            }
+        });
 
-                </div>
-                ${CampaignFormComponent()}
-                <div class='alert alert--error'>
-                    <span class='alert__mark'>❌</span>
-                    <span class='alert__text'>Some Error Here try again later</span>
-                </div>
-                <div class='alert alert--success'>
-                    <span class='alert__mark'>✔</span>
-                    <span class='alert__text'>Successfully Process done</span>
-                </div>
-            `;
-        handleNavbarEvents();
-        return html;
+        // overlay close btn can also be bound here
+        document.querySelector(".overlay__close-btn")?.addEventListener("click", () => {
+            document.querySelector(".overlay").classList.remove("show");
+        });
+    }
 }
 
 
@@ -91,77 +159,6 @@ const getReplacementText = () => {
         <h4 class='empty-info'>You Have not any campaigns yet</h4>
     `
 }
-
-if(!isAnonymousUser()){
-    getMyCampaigns()
-}
-
-
-document.addEventListener("click", (e) => {
-    
-    const addBtn = e.target.closest(".campaigns__add-btn");
-    const editCampaignBtn = e.target.closest(".campaign-card__button--edit")
-    const overlayCloseBtn = e.target.closest(".overlay__close-btn");
-    const overlay = document.querySelector(".overlay");
-    
-    if(addBtn) {
-        overlay.classList.add("show");
-        const form = overlay.querySelector("form");
-        
-        if(form.classList.contains("edit-campaign")){
-            overlay.querySelector("h2").textContent = "Create New Campaign";
-            form.classList.remove("edit-campaign");
-            form.querySelector("input#campaign-id").remove()
-            form.querySelector("button").textContent  = "Create Campaign"
-        }
-    }
-    
-    if(overlayCloseBtn) {
-        document.querySelector(".overlay").classList.remove("show")
-    } 
-
-    if(editCampaignBtn){
-        overlay.classList.add("show");
-        overlay.querySelector("h2").textContent = "Edit Campaign";
-
-        const campaignId = editCampaignBtn.querySelector("input").value;
-        const campaign = campaigns.find(x => x.id == campaignId);
-
-        const form = overlay.querySelector("form");
-        form.classList.add("edit-campaign");
-
-        const existingHidden = form.querySelector("#campaign-id");
-        if (existingHidden) existingHidden.remove();
-
-        form.insertAdjacentHTML("afterbegin", `
-            <input type="hidden" id="campaign-id" name="campaign-id" value="${campaignId}"/>
-        `);
-
-        form.querySelector("button").textContent = "Edit";
-
-        form.querySelector("#title").value = campaign.title || "";
-        form.querySelector("#description").value = campaign.description || "";
-        form.querySelector("#goal").value = campaign.goal || "";
-        form.querySelector("#deadline").value = campaign.deadline || "";
-        form.querySelector("#category").value = campaign.category || "";
-
-        if (form.classList.contains("edit-campaign")) {
-            document.getElementById("imageFile").removeAttribute("required");
-        } else {
-            document.getElementById("imageFile").setAttribute("required", "required");
-        }
-        
-        let existingImageInput = form.querySelector("#existingImage");
-        if (!existingImageInput) {
-            form.insertAdjacentHTML("beforeend", `
-                <input type="hidden" id="existingImage" name="existingImage" value="${campaign.image}" />
-            `);
-        } else {
-            existingImageInput.value = campaign.image;
-        }
-    
-    }
-}); 
 
 
 export function formatDateToYMD(dateStr) {

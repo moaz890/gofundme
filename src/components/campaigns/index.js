@@ -1,5 +1,5 @@
-export default function Campaigns() {
-    return `
+export default {
+    html: `
         <section class="campaigns">
             <div class="container">
                 <div class="campaigns__container">

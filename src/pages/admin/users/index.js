@@ -1,7 +1,7 @@
 
-export default function Users () {
+export default {
     
-    return `
+    html: `
         <div class="admin__users">
             <table class="admin__users__data">
                 <thead>
@@ -19,7 +19,10 @@ export default function Users () {
                 </tbody>
         </table>
     </div>
- `   
+ `,
+    init: () => {
+        getUsers()
+    }
 }
 
 export async function getUsers () {    
